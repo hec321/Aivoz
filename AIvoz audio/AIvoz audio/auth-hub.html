@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="auth.pageTitle">Centro de Autenticación - Aivoz</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fafaf9;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            color: #57534e;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Crimson Pro', serif;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .auth-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e7e5e4;
+            overflow: hidden;
+        }
+
+        /* Tab Switcher */
+        .tab-switcher {
+            display: flex;
+            background-color: #f5f5f4;
+            border-bottom: 1px solid #e7e5e4;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 16px 24px;
+            background: none;
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            color: #78716c;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-bottom: 2px solid transparent;
+            position: relative;
+        }
+
+        .tab-button:hover {
+            color: #57534e;
+        }
+
+        .tab-button.active {
+            color: #1c1917;
+            background: white;
+            border-bottom: 2px solid #1c1917;
+        }
+
+        /* Content Area */
+        .content {
+            padding: 48px;
+        }
+
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        /* Login View */
+        .login-view {
+            max-width: 450px;
+            margin: 0 auto;
+        }
+
+        .view-title {
+            font-size: 32px;
+            font-weight: 600;
+            color: #1c1917;
+            margin-bottom: 8px;
+        }
+
+        .view-subtitle {
+            color: #78716c;
+            margin-bottom: 32px;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #57534e;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d6d3d1;
+            border-radius: 6px;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #78716c;
+            box-shadow: 0 0 0 3px rgba(120, 113, 108, 0.1);
+        }
+
+        input::placeholder {
+            color: #a8a29e;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 12px 16px;
+            background-color: #292524;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 24px;
+        }
+
+        .submit-button:hover {
+            background-color: #1c1917;
+        }
+
+        .submit-button:disabled {
+            background-color: #e7e5e4;
+            color: #a8a29e;
+            cursor: not-allowed;
+        }
+
+        /* Signup View */
+        .signup-view {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .signup-view .view-title,
+        .signup-view .view-subtitle {
+            text-align: center;
+        }
+
+        /* Plan Selection */
+        .plan-section {
+            margin-top: 40px;
+            margin-bottom: 32px;
+        }
+
+        .plan-section-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #1c1917;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        @media (min-width: 768px) {
+            .plans-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .plan-card {
+            border: 2px solid #e7e5e4;
+            border-radius: 8px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .plan-card:hover {
+            border-color: #a8a29e;
+        }
+
+        .plan-card.selected {
+            border-color: #292524;
+            background-color: #fafaf9;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .plan-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1c1917;
+            margin-bottom: 12px;
+        }
+
+        .plan-feature {
+            font-size: 14px;
+            color: #57534e;
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        .plan-note {
+            font-size: 12px;
+            color: #78716c;
+            margin-top: 4px;
+        }
+
+        .plan-radio {
+            margin-top: 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .radio-indicator {
+            width: 16px;
+            height: 16px;
+            border: 2px solid #d6d3d1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .plan-card.selected .radio-indicator {
+            border-color: #292524;
+        }
+
+        .radio-indicator-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #292524;
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .plan-card.selected .radio-indicator-dot {
+            opacity: 1;
+        }
+
+        <div class="form-group"><label for="signupEmail">Email</label><input type="email" id="signupEmail" placeholder="you@example.com" required></div><div class="form-group"><label for="signupPassword">Password</label><input type="password" id="signupPassword" placeholder="••••••••" required></div>< !-- Plan Selection --><div class="plan-section"><h3 class="plan-section-title">Select Your Plan</h3><div class="plans-grid">< !-- Free Plan --><div class="plan-card" onclick="selectPlan('free')"><h4 class="plan-name">Free</h4><p class="plan-feature">1,
+        000 tokens included.</p><div class="plan-radio"><div class="radio-indicator"><div class="radio-indicator-dot"></div></div></div></div>< !-- Pro Plan --><div class="plan-card" onclick="selectPlan('pro')"><h4 class="plan-name">Pro</h4><p class="plan-feature">Unlimited tokens total.</p><p class="plan-note">Daily limit of 10,
+        000 tokens.</p><div class="plan-radio"><div class="radio-indicator"><div class="radio-indicator-dot"></div></div></div></div>< !-- Enterprise Plan --><div class="plan-card" onclick="selectPlan('enterprise')"><h4 class="plan-name">Enterprise</h4><p class="plan-feature">Direct communication channel with the company.</p><p class="plan-feature">Unlimited tokens*.</p><div class="plan-radio"><div class="radio-indicator"><div class="radio-indicator-dot"></div></div></div></div></div>< !-- Enterprise Footnote --><p class="plan-footnote">* under project supervision</p></div><button type="submit" class="submit-button" id="signupButton" disabled>Create Account </button></form></div></div></div></div><script>let selectedPlan=null;
+
+        function switchTab(tab) {
+            // Update tab buttons
+            document.getElementById('loginTab').classList.remove('active');
+            document.getElementById('signupTab').classList.remove('active');
+
+            // Update views
+            document.getElementById('loginView').classList.remove('active');
+            document.getElementById('signupView').classList.remove('active');
+
+            if (tab==='login') {
+                document.getElementById('loginTab').classList.add('active');
+                document.getElementById('loginView').classList.add('active');
+            }
+
+            else {
+                document.getElementById('signupTab').classList.add('active');
+                document.getElementById('signupView').classList.add('active');
+            }
+        }
+
+        function selectPlan(plan) {
+            // Remove selection from all cards
+            const cards=document.querySelectorAll('.plan-card');
+            cards.forEach(card=> card.classList.remove('selected'));
+
+            // Add selection to clicked card
+            event.currentTarget.classList.add('selected');
+
+            // Update selected plan
+            selectedPlan=plan;
+
+            // Enable submit button
+            document.getElementById('signupButton').disabled=false;
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+
+            const email=document.getElementById('loginEmail').value;
+            const password=document.getElementById('loginPassword').value;
+
+            console.log('Login Data:', {
+                email, password
+            });
+
+        alert('Login successful! Check console for data.');
+        }
+
+        function handleSignup(event) {
+            event.preventDefault();
+
+            if ( !selectedPlan) {
+                alert('Please select a plan to continue.');
+                return;
+            }
+
+            const name=document.getElementById('signupName').value;
+            const email=document.getElementById('signupEmail').value;
+            const password=document.getElementById('signupPassword').value;
+
+            console.log('Registration Data:', {
+                name,
+                email,
+                password,
+                selectedPlan
+            });
+
+        alert('Registration successful! Check console for data.');
+        }
+
+        </script></body></html>
