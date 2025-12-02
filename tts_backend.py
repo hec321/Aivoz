@@ -79,7 +79,7 @@ def generate_speech():
             config.TTS_RVC_API_URL,
             headers=headers,
             data=json.dumps(payload),
-            timeout=60  # 60 second timeout
+            timeout=400  # 60 second timeout
         )
         
         end_time = time.time()
